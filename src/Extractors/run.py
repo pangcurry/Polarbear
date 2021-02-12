@@ -31,7 +31,8 @@ temp_title = yt.streams[0].title
 print('get title ok')
 
 # 제목 문자열 검열
-music_title = re.sub('[/\\:*?"|<>'+"']",'',temp_title)
+music_title = re.sub('[/\\:*?,"|<>'+"']",'',temp_title)
+# music_title = ",,,,,,,,,,"
 print('use re ok')
 
 # 다운로드
