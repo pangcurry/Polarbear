@@ -20,10 +20,11 @@ const menuOnClick = (info, tab) => {
     }
     
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
+    // xhr.responseType = 'blob';
     const formData = {
         videoId
     };
+
     chrome.downloads.download({
         body: JSON.stringify(formData),
         headers: [
@@ -34,11 +35,16 @@ const menuOnClick = (info, tab) => {
         ],
         method: "POST",
         url: requestURL
+    }, () => {
+        const error = chrome.runtime.lastError;
+        console.log(error);
     });
+    
+
     // xhr.onreadystatechange = function() {
     //     if (xhr.readyState === xhr.DONE) {
     //         if (xhr.status === 200 || xhr.status === 201) {
-    //             console.log(xhr.response);
+    //             callback(xhr.responseText);
     //             console.log('hahahahaha');
                 
     //         } else {
@@ -47,13 +53,15 @@ const menuOnClick = (info, tab) => {
     //         }
     //     }
     // };
-    console.log(videoId);
-    console.log(typeof(videoId));
-    
 
     // xhr.open('POST', requestURL);
     // xhr.setRequestHeader('Content-type','application/json');
     // xhr.send(JSON.stringify(formData));
+
+
+    console.log(videoId);
+    console.log(typeof(videoId));
+    
     
 
 
