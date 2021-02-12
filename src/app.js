@@ -57,7 +57,25 @@ app.post('/', async (req, res) => {
             //     music_title: decodeURI(result[1])
             // });
         });
-        // const result = await PythonShell.run('run.py',options);
+        // const music_title = ",,,,,,,,,,.mp3";   //test
+        // const mp3_file = mp3_folder + music_title;  // test
+        
+        // if(fs.existsSync(mp3_file)) {
+        //     const mp3Name = music_title + '.mp3';
+        //     // const mimetype = mime.getType(file);
+        //     res.setHeader('Content-disposition', 'attachment; fileName=' + getDownloadFilename(req, mp3Name));
+        //     res.setHeader('Content-type', 'audio/mpeg');
+        //     const fileStream = fs.createReadStream(mp3_file);
+        //     fileStream.pipe(res);
+        // }
+        // else {
+        //     res.status(404).json({
+        //         message: '해당파일이 없습니다.'
+        //     });
+        //     // return;
+        // }
+        
+
     }
     catch(e) {
         console.log(e.message);
