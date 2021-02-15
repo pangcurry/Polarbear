@@ -40,34 +40,10 @@ const menuOnClick = (info, tab) => {
         console.log(error);
     });
     
-
-    // xhr.onreadystatechange = function() {
-    //     if (xhr.readyState === xhr.DONE) {
-    //         if (xhr.status === 200 || xhr.status === 201) {
-    //             callback(xhr.responseText);
-    //             console.log('hahahahaha');
-                
-    //         } else {
-    //             console.error(xhr.responseText);
-    //             console.log('erererereeerererer')
-    //         }
-    //     }
-    // };
-
-    // xhr.open('POST', requestURL);
-    // xhr.setRequestHeader('Content-type','application/json');
-    // xhr.send(JSON.stringify(formData));
-
-
     console.log(videoId);
     console.log(typeof(videoId));
     
-    
-
-
 }
-
-// chrome.contextMenus.onClicked.addListener();
 
 chrome.runtime.onInstalled.addListener(function() {
     chrome.contextMenus.create({
