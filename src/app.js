@@ -31,7 +31,7 @@ app.post('/', async (req, res) => {
             scriptPath,
             args: [req.body.videoId]
         }
-        PythonShell.run('run.py', options, (err,result) => {
+        PythonShell.run('mp3.py', options, (err,result) => {
             if(err) { throw err; }
             console.log(result);
             const music_title = decodeURIComponent(result[8]);
