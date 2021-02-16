@@ -1,14 +1,16 @@
 const express = require('express');
 const fs = require('fs');
-
 const cors = require('cors');
 const { PythonShell } = require('python-shell');
+const morgan = require('morgan');
+const config = require('./config/env');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(morgan('dev'));
 
 app.post('/ping', (req,res) => {
     console.log('pong');
@@ -19,9 +21,9 @@ app.post('/ping', (req,res) => {
 });
 
 const { getDownloadFilename } = require('./util/getDownloadFilename');
-const mp3_folder = 'C:/Users/user/Documents/Polarbear/data/mp3/';
-const scriptPath = 'C:/Users/user/Documents/Polarbear/src/Extractors';
-const timeout = 3000;
+const mp3_folder = config.mp3_path;
+const scriptPath = config.script_path;
+const timeout = config.timeout;
 
 app.post('/', async (req, res) => {
     try {
@@ -47,7 +49,7 @@ app.post('/', async (req, res) => {
                 res.setHeader('Content-type', 'audio/mpeg');
                 const fileStream = fs.createReadStream(mp3_file);
                 fileStream.pipe(res);
-
+                console.log();
                 options = {
                     mode: 'text',
                     pythonPath: '',
@@ -131,6 +133,6 @@ app.post('/', async (req, res) => {
 //     }
 // });
 
-app.listen(3002, () => {
+app.listen(config.port, () => {
     console.log('server open on 3002 port !!!');
 });
