@@ -21,6 +21,7 @@ app.post('/ping', (req,res) => {
 const { getDownloadFilename } = require('./util/getDownloadFilename');
 const mp3_folder = 'C:/Users/user/Documents/Polarbear/data/mp3/';
 const scriptPath = 'C:/Users/user/Documents/Polarbear/src/Extractors';
+const timeout = 3000;
 
 app.post('/', async (req, res) => {
     try {
@@ -31,6 +32,7 @@ app.post('/', async (req, res) => {
             scriptPath,
             args: [req.body.videoId]
         }
+        
         PythonShell.run('mp3.py', options, (err,result) => {
             if(err) { throw err; }
             console.log(result);
@@ -45,6 +47,21 @@ app.post('/', async (req, res) => {
                 res.setHeader('Content-type', 'audio/mpeg');
                 const fileStream = fs.createReadStream(mp3_file);
                 fileStream.pipe(res);
+
+                options = {
+                    mode: 'text',
+                    pythonPath: '',
+                    pythonOptions: ['-u'],
+                    scriptPath,
+                    args: [result[8]]
+                }
+                setTimeout(() => {
+                    PythonShell.run('remove.py', options, (err, result) => {
+                        if(err) { throw err; }
+                        console.log(result)
+                    });
+                }, timeout);
+                
             }
             else {
                 res.status(404).json({
