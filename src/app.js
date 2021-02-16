@@ -2,8 +2,9 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const { PythonShell } = require('python-shell');
-const morgan = require('morgan');
 const config = require('./config/env');
+const morgan = require('morgan');
+const { stream } = require('./config/winston');
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
+app.use(morgan('combined', { stream }));
 
 app.post('/ping', (req,res) => {
     console.log('pong');
