@@ -4,7 +4,7 @@ const cors = require('cors');
 const { PythonShell } = require('python-shell');
 const config = require('./config/env');
 const morgan = require('morgan');
-const { stream } = require('./config/winston');
+const { stream, logger } = require('./config/winston');
 
 const app = express();
 
@@ -51,7 +51,7 @@ app.post('/', async (req, res) => {
                 res.setHeader('Content-type', 'audio/mpeg');
                 const fileStream = fs.createReadStream(mp3_file);
                 fileStream.pipe(res);
-                console.log();
+                logger.info(result);
                 options = {
                     mode: 'text',
                     pythonPath: '',
@@ -63,6 +63,7 @@ app.post('/', async (req, res) => {
                     PythonShell.run('remove.py', options, (err, result) => {
                         if(err) { throw err; }
                         console.log(result)
+                        logger.info(result);
                     });
                 }, timeout);
                 
