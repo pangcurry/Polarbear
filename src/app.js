@@ -39,9 +39,9 @@ app.post('/', async (req, res) => {
         
         PythonShell.run('mp3.py', options, (err,result) => {
             if(err) { throw err; }
-            console.log(result);
+            // console.log(result);
             const music_title = decodeURIComponent(result[8]);
-            console.log(music_title);
+            // console.log(music_title);
             const mp3_file = mp3_folder + music_title + '.mp3';
             
             if(fs.existsSync(mp3_file)) {
@@ -51,6 +51,7 @@ app.post('/', async (req, res) => {
                 res.setHeader('Content-type', 'audio/mpeg');
                 const fileStream = fs.createReadStream(mp3_file);
                 fileStream.pipe(res);
+                logger.info(music_title);
                 logger.info(result);
                 options = {
                     mode: 'text',
@@ -62,7 +63,7 @@ app.post('/', async (req, res) => {
                 setTimeout(() => {
                     PythonShell.run('remove.py', options, (err, result) => {
                         if(err) { throw err; }
-                        console.log(result)
+                        // console.log(result)
                         logger.info(result);
                     });
                 }, timeout);
@@ -74,7 +75,6 @@ app.post('/', async (req, res) => {
                 });
                 // return;
             }
-        
             // res.status(200).json({
             //     music_title: decodeURI(result[1])
             // });
