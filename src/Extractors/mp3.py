@@ -3,9 +3,12 @@ import pytube
 from urllib import parse
 
 # video_dir = "C:\\Users\\user\\Desktop\\musicdown\\video"
-mp3_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\mp3"
-webm_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\webm"
-ffmpeg_dir = "C:\\Users\\user\\Documents\\Polarbear\\ffmpeg\\bin\\ffmpeg.exe"
+# mp3_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\mp3"
+# webm_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\webm"
+# ffmpeg_dir = "C:\\Users\\user\\Documents\\Polarbear\\ffmpeg\\bin\\ffmpeg.exe"
+mp3_dir = ".\\data\\mp3"
+webm_dir = ".\\data\\webm"
+ffmpeg_dir = ".\\ffmpeg\\bin\\ffmpeg.exe"
 
 # test URL
 # url = "https://www.youtube.com/watch?v=mKCnrFc63zU&ab_channel=%EC%95%84%EB%8A%94%ED%98%95%EB%8B%98Knowingbros"
