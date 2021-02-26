@@ -33,6 +33,42 @@ const mp3_folder = config.mp3_path;
 const scriptPath = config.script_path;
 const timeout = config.timeout;
 
+app.get('/test', async (req, res) => {
+    console.log('test ok.');
+    try {
+        client.hmset('video_list', {
+            'AAA': '0',
+            'BBB': '1'
+        });
+        client.hmset('video_list', 'dupang', 'good');
+
+        client.hmget('video_list','dupang', (err, value) => {
+            if(err) throw err;
+            console.log(value);
+            res.status(200).json({
+                message: "good",
+                data: value
+            });
+        });
+        client.hdel('testABC','test');
+        client.hdel('testABC','test');
+        client.hgetall('video_list', (err, obj) => {
+            if(err) throw err;
+            console.log(obj);
+        });
+
+        
+        
+    }
+    catch(e) {
+        console.log(e.message);
+        res.status(500).json({
+            message: e.message
+        });
+    }
+    
+});
+
 app.post('/', async (req, res) => {
     try {
         let options = {
