@@ -6,6 +6,12 @@ const config = require('./config/env');
 const morgan = require('morgan');
 const { stream, logger } = require('./config/winston');
 
+const redis = require('redis');
+const client = redis.createClient();
+client.on('error', (err) => {
+    console.log('Error ' + err);
+});
+
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
