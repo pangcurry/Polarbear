@@ -6,12 +6,6 @@ const config = require('./config/env');
 const morgan = require('morgan');
 const { stream, logger } = require('./config/winston');
 
-const redis = require('redis');
-const client = redis.createClient();
-client.on('error', (err) => {
-    console.log('Error ' + err);
-});
-
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
@@ -33,39 +27,41 @@ const mp3_folder = config.mp3_path;
 const scriptPath = config.script_path;
 const timeout = config.timeout;
 
+
 app.get('/test', async (req, res) => {
     console.log('test ok.');
-    try {
-        client.hmset('video_list', {
-            'AAA': '0',
-            'BBB': '1'
-        });
-        client.hmset('video_list', 'dupang', 'good');
+    
+    // client.hmset('video_list', {
+    //     'videoCode': '0'
+    // });
+    // client.hmset('video_list', 'dupang', 'good');
+    // client.hdel('video_list','testKey');
 
-        client.hmget('video_list','dupang', (err, value) => {
-            if(err) throw err;
-            console.log(value);
-            res.status(200).json({
-                message: "good",
-                data: value
-            });
-        });
-        client.hdel('testABC','test');
-        client.hdel('testABC','test');
-        client.hgetall('video_list', (err, obj) => {
-            if(err) throw err;
-            console.log(obj);
-        });
+    // client.exists(video_table, key, (err, result) => {
+    //     if(err) {
+    //         console.log(err);
+    //         throw err;
+    //     }
+    //     console.log(result);
+    //     if(!result) {
 
-        
-        
-    }
-    catch(e) {
-        console.log(e.message);
-        res.status(500).json({
-            message: e.message
-        });
-    }
+    //     }
+    // });
+
+    // client.hmget('video_list','testKey', (err, value) => {
+    //     if(err) {
+    //         console.log(err);
+    //     }
+    //     console.log(value);
+    //     res.status(200).json({
+    //         message: "good",
+    //         data: value
+    //     });
+    // });
+    // client.hgetall('video_list', (err, obj) => {
+    //     if(err) throw err;
+    //     console.log(obj);
+    // });
     
 });
 
