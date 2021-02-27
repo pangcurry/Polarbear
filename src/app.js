@@ -5,8 +5,12 @@ const { PythonShell } = require('python-shell');
 const config = require('./config/env');
 const morgan = require('morgan');
 const { stream, logger } = require('./config/winston');
+const { getDownloadFilename } = require('./util/getDownloadFilename');
 
 const app = express();
+const mp3_folder = config.mp3_path;
+const scriptPath = config.script_path;
+const timeout = config.timeout;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -22,15 +26,10 @@ app.post('/ping', (req,res) => {
     });
 });
 
-const { getDownloadFilename } = require('./util/getDownloadFilename');
-const mp3_folder = config.mp3_path;
-const scriptPath = config.script_path;
-const timeout = config.timeout;
-
-
 app.get('/test', async (req, res) => {
     console.log('test ok.');
     
+
     // client.hmset('video_list', {
     //     'videoCode': '0'
     // });
