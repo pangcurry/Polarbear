@@ -2,10 +2,12 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const { PythonShell } = require('python-shell');
-const config = require('./config/env');
 const morgan = require('morgan');
+
+const config = require('./config/env');
 const { stream, logger } = require('./config/winston');
 const { getDownloadFilename } = require('./util/getDownloadFilename');
+
 
 const app = express();
 const mp3_folder = config.mp3_path;
@@ -27,8 +29,9 @@ app.post('/ping', (req,res) => {
 });
 
 app.get('/test', async (req, res) => {
-    console.log('test ok.');
-    
+    console.log('test ok.');    
+
+
 
     // client.hmset('video_list', {
     //     'videoCode': '0'
