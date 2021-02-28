@@ -4,15 +4,33 @@ const cors = require('cors');
 const { PythonShell } = require('python-shell');
 const morgan = require('morgan');
 
-const config = require('./config/env');
 const { stream, logger } = require('./config/winston');
 const { getDownloadFilename } = require('./util/getDownloadFilename');
+const { KeyController } = require('./redis');
+// const RedisConnection = require('./redis/connection'); //redis
 
+//test
+const redis = require('redis');
+const config = require('./config/env');
+const { video_table } = require('./config/env');
+const client = redis.createClient();
+client.on('error', (err) => {
+    console.log('Error ' + err);
+});
+// table setting
+console.log('make hmset');
+client.hmset(video_table, {
+    'videoCode': '0'
+});
+//test
 
 const app = express();
 const mp3_folder = config.mp3_path;
 const scriptPath = config.script_path;
 const timeout = config.timeout;
+// const redisConnection = new RedisConnection(); //redis
+
+// redisConnection.setting(); //redis
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -29,7 +47,54 @@ app.post('/ping', (req,res) => {
 });
 
 app.get('/test', async (req, res) => {
-    console.log('test ok.');    
+    console.log('test ok.');
+    const key = req.body.videoId;
+    const isWorking = 0;
+    // const keyController = new KeyController(key);
+    try {
+        await client.hset(video_table, key, 'hhhhhhhhhhhhhhh');
+        // const isExist = await keyController.isExist();
+        // if(!isExist) {
+        //     console.log('in if isixist');
+        //     await keyController.generateKey(isWorking);
+        // }
+        // const value = await keyController.getValue();
+        // console.log(value);
+        
+        // const keyAll = keyController.getKeyall();
+        let keyAll;
+        let result1 = "dupang";
+        await client.hget(video_table, key, (err, value) => {
+            if(err) {
+                console.log(err);
+                throw err;
+            }
+            console.log("-----d---d----d-------",value);
+            result1 = value;
+            console.log('++++++++++++++++++++',result1);
+        });
+        await console.log('11111111111111111111111111111111111',result1);
+        client.hgetall(video_table, (err, obj) => {
+            if(err) {
+                console.log(err);
+                throw err;
+            }
+            console.log(obj);
+        });
+        console.log('-------',keyAll);
+        console.log('-------',result1);
+        res.status(200).json({
+            message: "ha",
+            data: keyAll
+        });
+    }
+    catch(e) {
+        console.log(e.message);
+        res.status(500).json({
+            message:e.message
+        });
+    }
+    
 
 
 
