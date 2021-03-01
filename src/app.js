@@ -52,7 +52,8 @@ app.get('/test', async (req, res) => {
     const isWorking = 0;
     // const keyController = new KeyController(key);
     try {
-        await client.hset(video_table, key, 'hhhhhhhhhhhhhhh');
+        console.log('hi');
+        client.set('StringKey','StringValue');
         // const isExist = await keyController.isExist();
         // if(!isExist) {
         //     console.log('in if isixist');
@@ -64,7 +65,7 @@ app.get('/test', async (req, res) => {
         // const keyAll = keyController.getKeyall();
         let keyAll;
         let result1 = "dupang";
-        await client.hget(video_table, key, (err, value) => {
+        client.hmget(video_table, key, (err, value) => {
             if(err) {
                 console.log(err);
                 throw err;
@@ -73,7 +74,7 @@ app.get('/test', async (req, res) => {
             result1 = value;
             console.log('++++++++++++++++++++',result1);
         });
-        await console.log('11111111111111111111111111111111111',result1);
+        console.log('11111111111111111111111111111111111',result1);
         client.hgetall(video_table, (err, obj) => {
             if(err) {
                 console.log(err);
