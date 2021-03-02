@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "iconv": "^3.0.0",
     "iconv-lite": "^0.6.2",
+    "lodash.clonedeep": "^4.5.0",
     "morgan": "^1.10.0",
     "pm2": "^4.5.4",
     "python-shell": "^2.0.3",
