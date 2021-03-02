@@ -19,9 +19,9 @@ client.on('error', (err) => {
 });
 // table setting
 console.log('make hmset');
-client.hmset(video_table, {
-    'videoCode': '0'
-});
+// client.hmset(video_table, {
+//     'videoCode': '0'
+// });
 //test
 
 const app = express();
@@ -54,40 +54,14 @@ app.get('/test', async (req, res) => {
     try {
         console.log('hi');
         client.set('StringKey','StringValue');
-        // const isExist = await keyController.isExist();
-        // if(!isExist) {
-        //     console.log('in if isixist');
-        //     await keyController.generateKey(isWorking);
-        // }
-        // const value = await keyController.getValue();
-        // console.log(value);
+        client.get('StringKey', (err, reply) => {
+            console.log(reply);
+            res.status(200).json({
+                message: "ha",
+                data: reply
+            });
+        });
         
-        // const keyAll = keyController.getKeyall();
-        let keyAll;
-        let result1 = "dupang";
-        client.hmget(video_table, key, (err, value) => {
-            if(err) {
-                console.log(err);
-                throw err;
-            }
-            console.log("-----d---d----d-------",value);
-            result1 = value;
-            console.log('++++++++++++++++++++',result1);
-        });
-        console.log('11111111111111111111111111111111111',result1);
-        client.hgetall(video_table, (err, obj) => {
-            if(err) {
-                console.log(err);
-                throw err;
-            }
-            console.log(obj);
-        });
-        console.log('-------',keyAll);
-        console.log('-------',result1);
-        res.status(200).json({
-            message: "ha",
-            data: keyAll
-        });
     }
     catch(e) {
         console.log(e.message);
