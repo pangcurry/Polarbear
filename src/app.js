@@ -8,11 +8,39 @@ const { stream, logger } = require('./config/winston');
 
 const app = express();
 
+// const server = require('http').createServer(app);
+// const io = require('socket.io')(server, { cors: { origin: "*" } });
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 app.use(morgan('combined', { stream }));
+
+// io.on('connection', socket =>  {
+//     socket.emit("test", "hello!!!!!!");
+
+//     socket.on("message", (data) => {
+//         console.log(data);
+//         io.emit('message', data);
+//     });
+//     socket.emit('polarbear-start', "hello polarbear!!!");
+//     socket.emit('polarbear-message', 'fjdskl;');
+//     socket.on('polarbear-message', data => {
+//         console.log(data);
+//         socket.emit('polarbear-messsage', "good");
+//     });
+// });
+
+app.get('/test', (req,res) => {
+    fs.readFile('C:/Users/user/Documents/Polarbear/Extensions/test.html', (err, data) => {
+        if(err) { console.log(err) }
+        else {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(data);
+        }
+    });
+});
 
 app.post('/ping', (req,res) => {
     console.log('pong');
@@ -36,14 +64,13 @@ app.post('/', async (req, res) => {
             scriptPath,
             args: [req.body.videoId]
         }
-        
         PythonShell.run('mp3.py', options, (err,result) => {
-            if(err) { throw err; }
-            // console.log(result);
-            const music_title = decodeURIComponent(result[8]);
-            // console.log(music_title);
+            if(err) { console.log(err.message) }
+            // console.log(result)
+            const music_title = decodeURIComponent(result[0]);
+            console.log(music_title);
             const mp3_file = mp3_folder + music_title + '.mp3';
-            
+           
             if(fs.existsSync(mp3_file)) {
                 const mp3Name = music_title + '.mp3';
                 // const mimetype = mime.getType(file);
@@ -58,12 +85,11 @@ app.post('/', async (req, res) => {
                     pythonPath: '',
                     pythonOptions: ['-u'],
                     scriptPath,
-                    args: [result[8]]
+                    args: [result[0]]
                 }
                 setTimeout(() => {
                     PythonShell.run('remove.py', options, (err, result) => {
                         if(err) { throw err; }
-                        // console.log(result)
                         logger.info(result);
                     });
                 }, timeout);
@@ -79,6 +105,28 @@ app.post('/', async (req, res) => {
             //     music_title: decodeURI(result[1])
             // });
         });
+
+
+        
+
+        // let count = 0;
+        // console.log('in server');
+        // const mp3_name = 'aespa Next Level Lyrics (에스파 Next Level 가사) (Color Coded Lyrics).mp3';
+        // const mp3_file = mp3_folder + mp3_name;
+        // res.setHeader('Content-disposition', 'attachment; fileName=' + getDownloadFilename(req, mp3_name));
+        // res.setHeader('Content-type', 'audio/mpeg');
+        // const fileStream = fs.createReadStream(mp3_file);
+        // fileStream.on('data', (data) => {
+        //     count += 1;
+        //     console.log(count, data);    
+        // });
+        
+        // fileStream.pipe(res);
+
+
+
+        // logger.info(music_title);
+        // logger.info(result);
         // const music_title = ",,,,,,,,,,.mp3";   //test
         // const mp3_file = mp3_folder + music_title;  // test
         
@@ -137,5 +185,10 @@ app.post('/', async (req, res) => {
 // });
 
 app.listen(config.port, () => {
+    if(!fs.existsSync("data")) {
+        fs.mkdirSync("data");
+        fs.mkdirSync("data/mp3")
+        fs.mkdirSync("data/webm")
+    }
     console.log('server open on 3002 port !!!');
 });
