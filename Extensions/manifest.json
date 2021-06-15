@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Getting started example",
-  "description": "This extension is test",
+  "name": "Polarbear",
+  "description": "This extension is Poloarbear",
   "version": "1.0.0",
 
   "browser_action": {
