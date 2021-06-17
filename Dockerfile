@@ -1,10 +1,16 @@
+FROM python:latest
 FROM node:latest
 
 RUN mkdir -p /polarbear
+
 WORKDIR /polarbear
-ADD . /polarbear
 
+COPY . /polarbear
+
+RUN cd /polarbear
 RUN npm i
-RUN npm i -g pm2 nodejs
+RUN cd ..
 
-CMD ["pm2","start","ecosystem.config.js"]
+EXPOSE 3002
+
+CMD ["npm","start"]
