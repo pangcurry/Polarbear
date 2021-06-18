@@ -11,7 +11,7 @@ const getQueryVariable = (query, variable) => {
     }
 }
 
-const menuOnClick = (info, tab) => {
+const menuOnClick = async (info, tab) => {
     try {
         var videoId = getQueryVariable(info.pageUrl.split('?')[1],'v');
     } catch (error) {
@@ -24,8 +24,8 @@ const menuOnClick = (info, tab) => {
     const formData = {
         videoId
     };
-
-    chrome.downloads.download({
+    let testTemp = 0;
+    const downloadId = await chrome.downloads.download({
         body: JSON.stringify(formData),
         headers: [
             {
@@ -35,11 +35,12 @@ const menuOnClick = (info, tab) => {
         ],
         method: "POST",
         url: requestURL
-    }, () => {
+    });
+    if(!downloadId) {
         const error = chrome.runtime.lastError;
         console.log(error);
-    });
-    
+    }
+    console.log(typeof(downloadId));
     console.log(videoId);
     console.log(typeof(videoId));
     
@@ -52,3 +53,5 @@ chrome.runtime.onInstalled.addListener(function() {
         "onclick": menuOnClick
     });
 });
+
+// console.log("hi i'm background !");
