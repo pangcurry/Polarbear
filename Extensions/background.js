@@ -1,5 +1,5 @@
 console.log('hello here is background.js.');
-const requestURL = "http://localhost:3002/";
+const requestURL = "http://13.124.208.2/";
 
 const getQueryVariable = (query, variable) => {
     const vars = query.split('&');
@@ -19,7 +19,7 @@ const menuOnClick = async (info, tab) => {
         return;
     }
     
-    const xhr = new XMLHttpRequest();
+    // const xhr = new XMLHttpRequest();
     // xhr.responseType = 'blob';
     const formData = {
         videoId
