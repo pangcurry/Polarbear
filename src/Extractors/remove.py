@@ -1,8 +1,8 @@
 from urllib import parse
 import os, sys
 
-mp3_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\mp3\\"
-webm_dir = "C:\\Users\\user\\Documents\\Polarbear\\data\\webm\\"
+mp3_dir = "/polarbear/data/mp3/"
+webm_dir = "/polarbear/data/webm/"
 music_title = parse.unquote(sys.argv[1])
 # music_title = "24kGoldn - Mood (Official Video) ft. iann dior"
 

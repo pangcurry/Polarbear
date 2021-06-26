@@ -1,10 +1,10 @@
-import sys, os, re, subprocess, time
+import sys, os, re, subprocess, uuid
 import pytube
 from urllib import parse
 
-mp3_dir = ".\\data\\mp3"
-webm_dir = ".\\data\\webm"
-ffmpeg_dir = ".\\ffmpeg\\bin\\ffmpeg.exe"
+mp3_dir = "/polarbear/data/mp3"
+webm_dir = "/polarbear/data/webm"
+ffmpeg_dir = "ffmpeg"
 
 # try:
 # test URL
@@ -31,39 +31,55 @@ temp_title = yt.streams[0].title
 
 # 제목 문자열 검열
 music_title = re.sub('[/\\:*?,"|<>'+"']",'',temp_title)
+# print('music_title::::::::::::', music_title)
 # print('use re ok')
 
+# 사용자가 확인할 제목
+# print(parse.quote(music_title))
+
+# 실제 저장될 파일 이름
+uid = uuid.uuid4()
+uid_str = uid.urn
+file_uuid = uid_str[9:]
+
 # webm파일 존재 여부
-isWebmExist = os.path.isfile(webm_dir+"\\"+music_title+".webm")
+isWebmExist = os.path.isfile(webm_dir+"/"+music_title+".webm")
 # print("isWebmExist")
 
 # webm 존재여부 확인
 if isWebmExist == False:
     # 다운로드
     test = yt.streams.filter(adaptive=True).order_by('abr').desc().first().download(output_path= webm_dir, filename=music_title)
-    # print('download ok')
 
     # 파일 이름 수정 
     if test != webm_dir+music_title:
-        os.rename(test, webm_dir + '\\' + music_title + '.webm')
+        os.rename(test, webm_dir + '/' + music_title + '.webm')
     # print('test ok')
+
+    # print('test:', test)
     
 
-isMp3Exist = os.path.isfile(mp3_dir+"\\"+music_title+".mp3")
+isMp3Exist = os.path.isfile(mp3_dir+"/"+music_title+".mp3")
 
 # mp3 존재여부 확인
 if isMp3Exist:
+    # 사용자가 확인할 제목
+    # print(parse.quote(music_title))
+    # 실제 파일 이름
     print(parse.quote(music_title))
     quit()
 
 # webm -> mp3 변환해주는 명령어 제작
-command = ffmpeg_dir + " -i " + '"' + webm_dir + '\\' + music_title + ".webm" + '" -acodec libmp3lame -aq 4 "' + mp3_dir + "\\" + music_title + '.mp3"'
+command = ffmpeg_dir + " -i " + '"' + webm_dir + '/' + music_title + ".webm" + '" -acodec libmp3lame -aq 4 "' + mp3_dir + "/" + music_title + '.mp3"'
 # print(command)
 
 # 명령어 실행
 popen = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 (stdoutdata, stderrdata) = popen.communicate()
-# print('go command ok')
+# print('command : ', command)
+# print('popen : ',popen)
+# print('stdoutdata: ',stdoutdata)
+# print('stderrdata: ',stderrdata)
 
 # 끝
 # print('clear')
