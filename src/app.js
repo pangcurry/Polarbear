@@ -62,13 +62,19 @@ app.post('/', async (req, res) => {
             pythonPath: '',
             pythonOptions: ['-u'],
             scriptPath,
-            args: [req.body.videoId]
+            args: [req.body.videoId || req.query.v]
         }
         PythonShell.run('mp3.py', options, (err,result) => {
             if(err) { console.log(err.message) }
-            // console.log(result)
+            if(!result) { 
+                console.log('need pytube update !!!');
+                res.status(500).json({
+                    message: "server error"
+                });
+            }
+            // console.log(result);
             const music_title = decodeURIComponent(result[0]);
-            console.log(music_title);
+            // console.log('music_title::::::::::::', music_title);
             const mp3_file = mp3_folder + music_title + '.mp3';
            
             if(fs.existsSync(mp3_file)) {
@@ -185,10 +191,11 @@ app.post('/', async (req, res) => {
 // });
 
 app.listen(config.port, () => {
-    if(!fs.existsSync("data")) {
-        fs.mkdirSync("data");
-        fs.mkdirSync("data/mp3")
-        fs.mkdirSync("data/webm")
+    if(!fs.existsSync("/polarbear/data/mp3")) {
+        fs.mkdirSync("/polarbear/data/mp3")
+    }
+    if(!fs.existsSync("/polarbear/data/webm")) {
+        fs.mkdirSync("/polarbear/data/webm")
     }
     console.log('server open on 3002 port !!!');
 });
