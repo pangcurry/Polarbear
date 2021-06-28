@@ -65,7 +65,9 @@ app.post('/', async (req, res) => {
             args: [req.body.videoId || req.query.v]
         }
         PythonShell.run('mp3.py', options, (err,result) => {
-            if(err) { console.log(err.message) }
+            if(err) {
+                console.log(err.message)
+            }
             if(!result) { 
                 console.log('need pytube update !!!');
                 res.status(500).json({
