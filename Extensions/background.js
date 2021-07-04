@@ -1,5 +1,6 @@
 console.log('hello here is background.js.');
-const requestURL = "http://13.124.208.2/";
+// const requestURL = "http://13.124.208.2/";
+const requestURL = "http://localhost:3002/";
 
 const getQueryVariable = (query, variable) => {
     const vars = query.split('&');
