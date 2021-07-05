@@ -1,8 +1,15 @@
 from urllib import parse
 import os, sys
 
-mp3_dir = "/polarbear/data/mp3/"
-webm_dir = "/polarbear/data/webm/"
+# # ---------- linux -------------
+# mp3_dir = "/polarbear/data/mp3/"
+# webm_dir = "/polarbear/data/webm/"
+
+# ---------- windows -------------
+current_path = os.getcwd() + "\\"
+mp3_dir = current_path + "data/mp3/"
+webm_dir = current_path + "data/webm/"
+
 music_title = parse.unquote(sys.argv[1])
 # music_title = "24kGoldn - Mood (Official Video) ft. iann dior"
 
