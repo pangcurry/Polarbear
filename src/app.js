@@ -193,10 +193,10 @@ app.post("/", async (req, res) => {
 
 app.listen(config.port, () => {
   if (!fs.existsSync("/home/ubuntu/polarbear/Polarbear/data/mp3")) {
-    fs.mkdirSync("/home/ubuntu/polarbear/polarbear/data/mp3");
+    fs.mkdirSync("/home/ubuntu/polarbear/Polarbear/data/mp3");
   }
-  if (!fs.existsSync("/home/ubuntu/polarbear/polarbear/data/webm")) {
-    fs.mkdirSync("/home/ubuntu/polarbear/polarbear/data/webm");
+  if (!fs.existsSync("/home/ubuntu/polarbear/Polarbear/data/webm")) {
+    fs.mkdirSync("/home/ubuntu/polarbear/Polarbear/data/webm");
   }
   console.log("server open on 3002 port !!!");
 });
