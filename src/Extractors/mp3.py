@@ -2,8 +2,8 @@ import sys, os, re, subprocess, uuid
 import pytube
 from urllib import parse
 
-mp3_dir = "/polarbear/data/mp3"
-webm_dir = "/polarbear/data/webm"
+mp3_dir = "/home/ubuntu/polarbear/polarbear/data/mp3"
+webm_dir = "/home/ubuntu/polarbear/polarbear/data/webm"
 ffmpeg_dir = "ffmpeg"
 
 # try:
