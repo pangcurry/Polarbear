@@ -5,7 +5,7 @@ dotenv.config();
 const __dirname = path.resolve() + "/src";
 
 const envList = {
-  port: 3002,
+  port: 80,
   mp3_path: __dirname + "/data/mp3",
   script_path: __dirname + "/Extractors",
   timeout: 5000,
