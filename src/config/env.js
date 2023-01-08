@@ -1,8 +1,14 @@
-require('dotenv').config()
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config();
 
-module.exports = {
-    port: process.env.SERVER_PORT,
-    mp3_path: process.env.MP3_PATH,
-    script_path: process.env.SCRIPT_PATH,
-    timeout: process.env.TIMEOUT
-}
+const __dirname = path.resolve() + "/src";
+
+const envList = {
+  port: 3002,
+  mp3_path: __dirname + "/data/mp3",
+  script_path: __dirname + "/Extractors",
+  timeout: 5000,
+};
+
+export default envList;

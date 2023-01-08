@@ -1,65 +1,37 @@
-const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
-const { PythonShell } = require("python-shell");
-const config = require("./config/env");
-const morgan = require("morgan");
-const { stream, logger } = require("./config/winston");
+import express from "express";
+import fs from "fs";
+import cors from "cors";
+import { PythonShell } from "python-shell";
+import config from "./config/env.js";
+import morgan from "morgan";
+import { stream, logger } from "./config/winston.js";
+import path from "path";
+import { getDownloadFilename } from "./util/getDownloadFilename.js";
+
+export const __dirname = path.resolve() + "/src";
 
 const app = express();
-
 // const server = require('http').createServer(app);
 // const io = require('socket.io')(server, { cors: { origin: "*" } });
-
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 app.use(morgan("combined", { stream }));
 
-// io.on('connection', socket =>  {
-//     socket.emit("test", "hello!!!!!!");
-
-//     socket.on("message", (data) => {
-//         console.log(data);
-//         io.emit('message', data);
-//     });
-//     socket.emit('polarbear-start', "hello polarbear!!!");
-//     socket.emit('polarbear-message', 'fjdskl;');
-//     socket.on('polarbear-message', data => {
-//         console.log(data);
-//         socket.emit('polarbear-messsage', "good");
-//     });
-// });
-
-app.get("/test", (req, res) => {
-  fs.readFile(
-    "C:/Users/user/Documents/Polarbear/Extensions/test.html",
-    (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(data);
-      }
-    }
-  );
-});
-
 app.post("/ping", (req, res) => {
   console.log("pong");
-  console.log(req.body.videoId);
+  console.log(req.body);
   res.status(200).json({
     message: "pong",
   });
 });
 
-const { getDownloadFilename } = require("./util/getDownloadFilename");
 const mp3_folder = config.mp3_path;
 const scriptPath = config.script_path;
 const timeout = config.timeout;
 
-app.post("/", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     let options = {
       mode: "text",
@@ -78,43 +50,53 @@ app.post("/", async (req, res) => {
           message: "server error",
         });
       }
-      // console.log(result);
-      const music_title = decodeURIComponent(result[0]);
-      // console.log('music_title::::::::::::', music_title);
-      const mp3_file = mp3_folder + music_title + ".mp3";
-
-      if (fs.existsSync(mp3_file)) {
-        const mp3Name = music_title + ".mp3";
-        // const mimetype = mime.getType(file);
-        res.setHeader(
-          "Content-disposition",
-          "attachment; fileName=" + getDownloadFilename(req, mp3Name)
-        );
-        res.setHeader("Content-type", "audio/mpeg");
-        const fileStream = fs.createReadStream(mp3_file);
-        fileStream.pipe(res);
-        logger.info(music_title);
-        logger.info(result);
-        options = {
-          mode: "text",
-          pythonPath: "",
-          pythonOptions: ["-u"],
-          scriptPath,
-          args: [result[0]],
-        };
-        setTimeout(() => {
-          PythonShell.run("remove.py", options, (err, result) => {
-            if (err) {
-              throw err;
-            }
-            logger.info(result);
+      try {
+        console.log(result);
+        const music_title = decodeURIComponent(result[-0]);
+        console.log("music_title::::::::::::", music_title);
+        const mp3_file = `${mp3_folder}/${music_title}.mp3`;
+        console.log("최종 파일 이름 ::: ", mp3_file);
+        if (fs.existsSync(mp3_file)) {
+          const mp3Name = music_title + ".mp3";
+          // const mimetype = mime.getType(file);
+          res.setHeader(
+            "Content-disposition",
+            "attachment; fileName=" + getDownloadFilename(req, mp3Name)
+          );
+          res.setHeader("Content-type", "audio/mpeg");
+          const fileStream = fs.createReadStream(mp3_file);
+          fileStream.pipe(res);
+          logger.info(music_title);
+          logger.info(result);
+          options = {
+            mode: "text",
+            pythonPath: "",
+            pythonOptions: ["-u"],
+            scriptPath,
+            args: [result[-0]],
+          };
+          setTimeout(() => {
+            console.log("실행함");
+            PythonShell.run("remove.py", options, (err, result) => {
+              try {
+                console.log("들어옴 ? ", err, result);
+                if (err) {
+                  throw err;
+                }
+                logger.info(result);
+              } catch (err) {
+                console.error("Can not remove files ! ", err);
+              }
+            });
+          }, timeout);
+        } else {
+          res.status(404).json({
+            message: "해당파일이 없습니다.",
           });
-        }, timeout);
-      } else {
-        res.status(404).json({
-          message: "해당파일이 없습니다.",
-        });
-        // return;
+          // return;
+        }
+      } catch (err) {
+        console.log(err, "에러남");
       }
       // res.status(200).json({
       //     music_title: decodeURI(result[1])
@@ -192,11 +174,13 @@ app.post("/", async (req, res) => {
 // });
 
 app.listen(config.port, () => {
-  if (!fs.existsSync("/home/ubuntu/polarbear/Polarbear/data/mp3")) {
-    fs.mkdirSync("/home/ubuntu/polarbear/Polarbear/data/mp3");
+  console.log(config.port);
+  console.log(__dirname);
+  if (!fs.existsSync(__dirname + "/data/mp3")) {
+    fs.mkdirSync(__dirname + "/data/mp3", { recursive: true });
   }
-  if (!fs.existsSync("/home/ubuntu/polarbear/Polarbear/data/webm")) {
-    fs.mkdirSync("/home/ubuntu/polarbear/Polarbear/data/webm");
+  if (!fs.existsSync(__dirname + "/data/webm")) {
+    fs.mkdirSync(__dirname + "/data/webm", { recursive: true });
   }
   console.log("server open on 3002 port !!!");
 });

@@ -6,11 +6,12 @@ import os, sys
 # webm_dir = "/polarbear/data/webm/"
 
 # ---------- windows -------------
-current_path = os.getcwd() + "\\"
-mp3_dir = current_path + "data/mp3/"
-webm_dir = current_path + "data/webm/"
-
+mp3_dir = os.path.dirname(os.path.realpath(__file__)) + "/../data/mp3/"
+webm_dir = os.path.dirname(os.path.realpath(__file__)) + "/../data/webm/"
+print(mp3_dir)
 music_title = parse.unquote(sys.argv[1])
+print(music_title)
+print(mp3_dir + music_title + ".mp3")
 # music_title = "24kGoldn - Mood (Official Video) ft. iann dior"
 
 if os.path.isfile(mp3_dir + music_title + ".mp3"):

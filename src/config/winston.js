@@ -1,35 +1,32 @@
-const fs = require('fs');
-const winston = require('winston');
+import fs from "fs";
+import path from "path";
+import winston from "winston";
+const __dirname = path.resolve();
 
-const logDir = __dirname + '/../../logs';
+const logDir = __dirname + "/src" + "/../../logs";
 
-if(!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir);
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir);
 }
 
 const infoTransport = new winston.transports.File({
-    filename: 'info.log',
-    dirname: logDir,
-    level: 'info'
+  filename: "info.log",
+  dirname: logDir,
+  level: "info",
 });
 
 const errorTransport = new winston.transports.File({
-    filename: 'error.log',
-    dirname: logDir,
-    level: 'error'
+  filename: "error.log",
+  dirname: logDir,
+  level: "error",
 });
 
-const logger = winston.createLogger({
-    transports: [ infoTransport, errorTransport ]
+export const logger = winston.createLogger({
+  transports: [infoTransport, errorTransport],
 });
 
-const stream = {
-    write: message => {
-        logger.info(message);
-    }
-};
-
-module.exports = {
-    logger,
-    stream
+export const stream = {
+  write: (message) => {
+    logger.info(message);
+  },
 };
