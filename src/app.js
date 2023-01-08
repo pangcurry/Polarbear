@@ -2,13 +2,14 @@ import express from "express";
 import fs from "fs";
 import cors from "cors";
 import { PythonShell } from "python-shell";
-import config from "./config/env.js";
+import { envList as config, __dirname } from "./config/env.js";
 import morgan from "morgan";
 import { stream, logger } from "./config/winston.js";
 import path from "path";
 import { getDownloadFilename } from "./util/getDownloadFilename.js";
 
-export const __dirname = path.resolve() + "/src";
+// export const __dirname = path.resolve() + "/src";
+// export const __dirname = path.resolve(); // 로컬
 
 const app = express();
 // const server = require('http').createServer(app);
@@ -20,8 +21,11 @@ app.use(morgan("dev"));
 app.use(morgan("combined", { stream }));
 
 app.post("/ping", (req, res) => {
+  const ip = req.headers["x-forwarded-for"] || req.client._peername.address;
+  console.log(req.headers);
   console.log("pong");
-  console.log(req.body);
+  console.log("[ip]>>>", ip);
+  console.log("[body]>>>", req.body);
   res.status(200).json({
     message: "pong",
   });

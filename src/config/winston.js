@@ -1,9 +1,10 @@
 import fs from "fs";
 import path from "path";
 import winston from "winston";
-const __dirname = path.resolve();
+import { __dirname } from "./env.js";
+// const __dirname = path.resolve();
 
-const logDir = __dirname + "/src" + "/../../logs";
+const logDir = __dirname + "/../../logs";
 
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
