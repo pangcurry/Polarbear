@@ -37,6 +37,8 @@ const timeout = config.timeout;
 
 app.get("/", async (req, res) => {
   try {
+    const ip = req.headers["x-forwarded-for"] || req.client._peername.address;
+    console.log("[ ip ] >>> ", ip);
     let options = {
       mode: "text",
       pythonPath: "",

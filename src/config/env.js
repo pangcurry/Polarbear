@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import path from "path";
 dotenv.config();
 
-// export const __dirname = path.resolve() + "/src";
-export const __dirname = path.resolve(); // 로컬
+export const __dirname = path.resolve() + "/src";
+// export const __dirname = path.resolve(); // 로컬
 
 export const envList = {
   port: 80,
