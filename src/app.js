@@ -59,7 +59,6 @@ app.get("/", async (req, res) => {
       try {
         console.log(result);
         const music_title = decodeURIComponent(result[-0]);
-        console.log("music_title::::::::::::", music_title);
         const mp3_file = `${mp3_folder}/${music_title}.mp3`;
         console.log("최종 파일 이름 ::: ", mp3_file);
         if (fs.existsSync(mp3_file)) {
@@ -70,6 +69,10 @@ app.get("/", async (req, res) => {
             "attachment; fileName=" + getDownloadFilename(req, mp3Name)
           );
           res.setHeader("Content-type", "audio/mpeg");
+          res.setHeader(
+            "FILE_NAME",
+            getDownloadFilename(req, mp3Name || "music.mp3")
+          );
           const fileStream = fs.createReadStream(mp3_file);
           fileStream.pipe(res);
           logger.info(music_title);
@@ -82,10 +85,9 @@ app.get("/", async (req, res) => {
             args: [result[-0]],
           };
           setTimeout(() => {
-            console.log("실행함");
+            console.log("timeout call");
             PythonShell.run("remove.py", options, (err, result) => {
               try {
-                console.log("들어옴 ? ", err, result);
                 if (err) {
                   throw err;
                 }
@@ -103,45 +105,14 @@ app.get("/", async (req, res) => {
         }
       } catch (err) {
         console.log(err, "에러남");
+        res.status(500).json({
+          message: "failed",
+        });
       }
       // res.status(200).json({
       //     music_title: decodeURI(result[1])
       // });
     });
-
-    // let count = 0;
-    // console.log('in server');
-    // const mp3_name = 'aespa Next Level Lyrics (에스파 Next Level 가사) (Color Coded Lyrics).mp3';
-    // const mp3_file = mp3_folder + mp3_name;
-    // res.setHeader('Content-disposition', 'attachment; fileName=' + getDownloadFilename(req, mp3_name));
-    // res.setHeader('Content-type', 'audio/mpeg');
-    // const fileStream = fs.createReadStream(mp3_file);
-    // fileStream.on('data', (data) => {
-    //     count += 1;
-    //     console.log(count, data);
-    // });
-
-    // fileStream.pipe(res);
-
-    // logger.info(music_title);
-    // logger.info(result);
-    // const music_title = ",,,,,,,,,,.mp3";   //test
-    // const mp3_file = mp3_folder + music_title;  // test
-
-    // if(fs.existsSync(mp3_file)) {
-    //     const mp3Name = music_title + '.mp3';
-    //     // const mimetype = mime.getType(file);
-    //     res.setHeader('Content-disposition', 'attachment; fileName=' + getDownloadFilename(req, mp3Name));
-    //     res.setHeader('Content-type', 'audio/mpeg');
-    //     const fileStream = fs.createReadStream(mp3_file);
-    //     fileStream.pipe(res);
-    // }
-    // else {
-    //     res.status(404).json({
-    //         message: '해당파일이 없습니다.'
-    //     });
-    //     // return;
-    // }
   } catch (e) {
     console.log(e.message);
     res.status(500).json({
@@ -150,34 +121,9 @@ app.get("/", async (req, res) => {
   }
 });
 
-// app.get('/:music_title', async (req,res) => {   // music_title : 음악의 제목만 전달
-//     // const mp3_folder = 'C:/Users/user/Desktop/musicdown/mp3/';
-//     const mp3_file = mp3_folder + req.params.music_title + '.mp3';
-//     console.log(req.params.music_title);
-//     console.log(mp3_file);
-//     try {
-//         if(fs.existsSync(mp3_file)) {
-//             const mp3Name = req.params.music_title + '.mp3';
-//             // const mimetype = mime.getType(file);
-//             res.setHeader('Content-disposition', 'attachment; fileName=' + mp3Name);
-//             res.setHeader('Content-type', 'audio/mpeg');
-//             const fileStream = fs.createReadStream(mp3_file);
-//             fileStream.pipe(res);
-//         }
-//         else {
-//             res.status(404).json({
-//                 message: '해당파일이 없습니다.'
-//             });
-//             // return;
-//         }
-//     } catch (e) {
-//         console.log(e);
-//         res.status(500).json({
-//             message: e.message
-//         });
-//         // return;
-//     }
-// });
+app.get("/polarbear", async (req, res) => {
+  res.sendFile(__dirname + "/public/polarbear_v2_main.html");
+});
 
 app.listen(config.port, () => {
   console.log(config.port);
