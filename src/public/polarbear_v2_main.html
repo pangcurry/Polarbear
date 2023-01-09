@@ -103,6 +103,7 @@
           value=""
           placeholder="링크를 입력해주세요."
           autofocus
+          onkeyup="onkeypressFn(event)"
         />
         <button id="button_download" type="button" onclick="onclickButton()">
           Download
@@ -118,6 +119,11 @@
       downloadButton.style.display = "block";
       loading.style.display = "none";
 
+      function onkeypressFn(f) {
+        if (f.keyCode === 13) {
+          onclickButton();
+        }
+      }
       inputE.onfocus = () => {
         inputE.style.border = "none";
         inputE.style.backgroundColor = "white";
@@ -133,7 +139,7 @@
         //"https://www.youtube.com/watch?v=A9dX-C5SBD4&list=RD65A7_eNDcks&index=6&ab_channel=GryffinVEVO";
         const inputValue = document.getElementById("input-youtube").value;
         if (
-          (inputValue.indexOf("https://www.youtube.com/") >= 0 &&
+          (inputValue.indexOf("youtube.com/") >= 0 &&
             inputValue.indexOf("?v=") >= 0) ||
           inputValue.indexOf("youtu.be/") >= 0
         ) {
@@ -157,6 +163,7 @@
             downloadButton.style.display = "block";
             loading.style.display = "none";
             inputE.style.backgroundColor = "#fff6f8";
+            inputE.focus();
             return;
           }
           axios
@@ -188,6 +195,7 @@
               downloadButton.style.display = "block";
               loading.style.display = "none";
               inputE.style.backgroundColor = "#fff6f8";
+              inputE.focus();
               click = false;
             });
         } else {
@@ -195,6 +203,7 @@
           downloadButton.style.display = "block";
           loading.style.display = "none";
           inputE.style.backgroundColor = "#fff6f8";
+          inputE.focus();
           click = false;
         }
       }
